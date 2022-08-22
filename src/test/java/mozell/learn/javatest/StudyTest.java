@@ -4,17 +4,19 @@ import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class StudyTest {
 
     @Test
-    public void create() throws Exception {
+    @DisplayName("첫번째 테스트")
+    public void create_first_test() throws Exception {
         Study study = new Study();
         assertNotNull(study);
         System.out.println("create");
     }
 
     @Test
-    void create1() {
+    void create_second_test() {
         System.out.println("create1");
     }
 
