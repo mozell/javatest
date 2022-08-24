@@ -1,12 +1,15 @@
 package mozell.learn.javatest;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.condition.*;
 
 import java.time.Duration;
 import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.junit.jupiter.api.Assumptions.assumingThat;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class StudyTest {
@@ -70,6 +73,55 @@ class StudyTest {
     @Test
     void create_second_test() {
         System.out.println("create1");
+    }
+
+    @Test
+    @DisplayName("조건에따른 테스트 강의 assume1")
+    void create_test_assume1() {
+        /**
+         * Edit Configurations (Run/Debug Configurations) -> Environment variables 세팅
+         *  name : TEST_ENV / value : LOCAL
+         */
+        String test_env = System.getenv("TEST_ENV");
+        System.out.println("test_env = " + test_env);
+
+        // assumeTrue() : 조건 검증
+        assumeTrue("mozell".equalsIgnoreCase(test_env));
+
+        // assumingThat() : 해당 조건일 때 테스트 수행
+        assumingThat("LOCAL".equalsIgnoreCase(test_env), () -> {
+            Study study = new Study(100);
+            System.out.println("study.getLimit() = " + study.getLimit());
+            assertNotNull(study);
+        });
+        assumingThat("mozell".equalsIgnoreCase(test_env), () -> {
+            Study study = new Study(10);
+            System.out.println("study.getLimit() = " + study.getLimit());
+            assertNotNull(study);
+        });
+    }
+
+    @Test
+    @DisplayName("조건에따른 테스트 강의 assume - Enabled Annotation")
+    @EnabledOnOs(OS.WINDOWS)
+    @EnabledOnJre({JRE.JAVA_8, JRE.JAVA_9, JRE.JAVA_10, JRE.JAVA_11})
+    void create_test_assume2() {
+        String test_env = System.getenv("TEST_ENV");
+        System.out.println("test_env = " + test_env);
+
+        Study study = new Study(100);
+        assertNotNull(study);
+    }
+
+    @Test
+    @DisplayName("조건에따른 테스트 강의 assume - EnabledIfEnvironmentVariable")
+    @EnabledIfEnvironmentVariable(named = "TEST_ENV", matches = "mozell")
+    void create_test_assume3() {
+        String test_env = System.getenv("TEST_ENV");
+        System.out.println("test_env = " + test_env);
+
+        Study study = new Study(100);
+        assertNotNull(study);
     }
 
     /**
