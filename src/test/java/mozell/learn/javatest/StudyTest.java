@@ -2,6 +2,8 @@ package mozell.learn.javatest;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.Duration;
 import java.util.function.Supplier;
@@ -151,6 +153,20 @@ class StudyTest {
     @SlowTest
     void create_test_custom_tag2() {
         System.out.println("slow");
+    }
+
+    @DisplayName("테스트 반복하기 1 - 단순반복")
+    @RepeatedTest(value = 10, name = "{displayName}, {currentRepetition}/{totalRepetitions}")
+    void repeatTest1 (RepetitionInfo repetitionInfo) {
+        System.out.println("test " + repetitionInfo.getCurrentRepetition() + "/"
+                                   + repetitionInfo.getTotalRepetitions());
+    }
+
+    @DisplayName("테스트 반복하기 2 - 값 반복")
+    @ParameterizedTest(name = "{index} {displayName} message = {0}")
+    @ValueSource(strings = {"날씨가", "많이", "선선해지고", "있네요."})
+    void parameterizedTest(String message) {
+        System.out.println(message);
     }
 
     /**
