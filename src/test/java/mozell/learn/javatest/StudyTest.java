@@ -141,6 +141,18 @@ class StudyTest {
         System.out.println("tags");
     }
 
+    @DisplayName("커스텀 태그 1")
+    @FastTest
+    void create_test_custom_tag1() {
+        System.out.println("fast");
+    }
+
+    @DisplayName("커스텀 태그 2")
+    @SlowTest
+    void create_test_custom_tag2() {
+        System.out.println("slow");
+    }
+
     /**
      * @Disabled
      * 깨지는 테스트인 경우에, 테스트를 무시하고 돌릴 수 있다.
