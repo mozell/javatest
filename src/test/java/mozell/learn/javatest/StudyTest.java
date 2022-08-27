@@ -124,6 +124,23 @@ class StudyTest {
         assertNotNull(study);
     }
 
+    @Test
+    @DisplayName("태깅과 필터링 - Tag")
+    @Tag("fast")
+    void create_test_tag1() {
+        System.out.println("tag");
+    }
+
+    @Test
+    @DisplayName("태깅과 필터링 - Tags")
+    @Tags({
+        @Tag("fast"),
+        @Tag("tag2")
+    })
+    void create_test_tag2() {
+        System.out.println("tags");
+    }
+
     /**
      * @Disabled
      * 깨지는 테스트인 경우에, 테스트를 무시하고 돌릴 수 있다.
