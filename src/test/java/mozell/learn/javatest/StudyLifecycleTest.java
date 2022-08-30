@@ -1,13 +1,11 @@
 package mozell.learn.javatest;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class StudyLifecycleTest {
 
 
@@ -18,6 +16,7 @@ public class StudyLifecycleTest {
     }
 
     @Test
+    @Order(2)
     void test1() {
         Study study = new Study(10);
         System.out.println(this);
@@ -25,6 +24,7 @@ public class StudyLifecycleTest {
     }
 
     @Test
+    @Order(1)
     void test2() {
         Study study = new Study(20);
         System.out.println(this);
