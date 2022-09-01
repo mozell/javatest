@@ -2,14 +2,18 @@ package mozell.learn.javatest;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@ExtendWith(FindSlowTestExtension.class)
+//@ExtendWith(FindSlowTestExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class StudyLifecycleTest {
 
     int value = 1;
+
+    @RegisterExtension
+    static FindSlowTestExtension findSlowTestExtension = new FindSlowTestExtension(1000L);
 
     // private만 아니면된다. 라이프사이클 추가함으로써 static 빼도된다.
     @BeforeAll
