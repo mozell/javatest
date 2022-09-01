@@ -1,10 +1,11 @@
 package mozell.learn.javatest;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ExtendWith(FindSlowTestExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class StudyLifecycleTest {
 
@@ -42,6 +43,15 @@ public class StudyLifecycleTest {
         System.out.println(this);
         System.out.println("value = " + value++);
         assertNotNull(study);
+    }
+
+    @Test
+    @Order(4)
+    @Disabled
+    void test_4() throws InterruptedException {
+        Thread.sleep(1005L);
+        System.out.println(this);
+        System.out.println("value = " + value++);
     }
     // Lifecycle을 추가함으로써 실제로 test1(), test2() 의 인스턴스값이 같음을 확인할 수 있다.
 
