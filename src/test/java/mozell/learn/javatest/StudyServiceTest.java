@@ -2,6 +2,7 @@ package mozell.learn.javatest;
 
 import mozell.learn.mockitoPack.domain.Member;
 import mozell.learn.mockitoPack.domain.Study;
+import mozell.learn.mockitoPack.domain.StudyStatus;
 import mozell.learn.mockitoPack.member.MemberService;
 import mozell.learn.mockitoPack.study.StudyRepository;
 import mozell.learn.mockitoPack.study.StudyService;
@@ -268,5 +269,29 @@ public class StudyServiceTest {
         then(memberService).should(times(1)).notify(study);
         then(memberService).should(times(1)).notify(member);
         then(memberService).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    @DisplayName("Mockito 연습문제")
+    void openStudy() {
+        // Given
+        StudyService studyService = new StudyService(memberService, studyRepository);
+        Study study = new Study(10, "더 자바, 테스트");
+        assertNull(study.getOpenedDateTime());
+
+        // [TO-DO] studyRepository Mock 객체의 save 메소드를호출 시 study를 리턴하도록 만들기.
+        given(studyRepository.save(study)).willReturn(study);
+
+        // When
+        studyService.openStudy(study);
+
+        // Then
+        // [TO-DO] study의 status가 OPENED로 변경됐는지 확인
+        assertEquals(StudyStatus.OPENED, study.getStatus());
+        // [TO-DO] study의 openedDataTime이 null이 아닌지 확인
+        assertNotNull(study.getOpenedDateTime());
+        // [TO-DO] memberService의 notify(study)가 호출 됐는지 확인.
+        then(memberService).should(times(1)).notify(study);
+
     }
 }
