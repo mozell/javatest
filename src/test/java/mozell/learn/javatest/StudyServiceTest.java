@@ -8,6 +8,7 @@ import mozell.learn.mockitoPack.study.StudyService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -200,6 +201,43 @@ public class StudyServiceTest {
 
         assertNotNull(study.getOwner());
         assertEquals(member, study.getOwner());
+
+    }
+
+    @Test
+    @DisplayName("Mock 객체 확인")
+    public void mockObjCheck() {
+
+        StudyService studyService = new StudyService(memberService, studyRepository);
+        assertNotNull(studyService);
+
+        Member member = new Member();
+        member.setId(1L);
+        member.setEmail("test@email.com");
+
+        Study study = new Study(10, "TEST");
+
+        when(memberService.findById(1L)).thenReturn(Optional.of(member));
+        when(studyRepository.save(study)).thenReturn(study);
+
+        studyService.createNewStudy(1L, study);
+
+        // [verify, times] 특정 메소드가 호출이 여부 체크(횟수까지 체크 가능)
+        //notify() 메소드가 'study' 객체로 '1'번 호출되었는지 체크 -> 안되었으면 에러
+        verify(memberService, times(1)).notify(study);
+        //notify() 메소드가 'member' 객체로 '1'번 호출되었는지 체크 -> 안되었으면 에러
+        verify(memberService, times(1)).notify(member);
+
+        // [verify, never] validate() 메소드가 아무(any)객체로 호출되지 않았는지 체크
+        verify(memberService, never()).validate(any());
+
+        // [InOrder] 메소드 호출 순서 체크
+        InOrder inOrder = inOrder(memberService);
+        inOrder.verify(memberService).notify(study);    // 'study'  로 첫번째 호출 체크
+        inOrder.verify(memberService).notify(member);   // 'member' 로 두번째 호출 체크
+
+        // [verifyNoMoreInteractions] 더이상 mock 객체를 사용하지 않는지 체크
+        verifyNoMoreInteractions(memberService);
 
     }
 }
