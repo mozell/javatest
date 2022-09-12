@@ -1,5 +1,8 @@
 package mozell.learn.javatest;
 
+import com.tngtech.archunit.core.domain.JavaClasses;
+import com.tngtech.archunit.core.importer.ClassFileImporter;
+import com.tngtech.archunit.lang.ArchRule;
 import mozell.learn.mockitoPack.domain.Member;
 import mozell.learn.mockitoPack.domain.Study;
 import mozell.learn.mockitoPack.domain.StudyStatus;
@@ -16,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -294,4 +298,16 @@ public class StudyServiceTest {
         then(memberService).should(times(1)).notify(study);
 
     }
+
+    @Test
+    public void Service_should_only_be_accessed_by_Controllers() {
+        JavaClasses importedClasses = new ClassFileImporter().importPackages("mozell.learn.mockitoPack");
+
+        ArchRule myRule = classes()
+                .that().resideInAPackage("..service..")
+                .should().onlyBeAccessed().byAnyPackage("..controller..", "..service..");
+
+        myRule.check(importedClasses);
+    }
+
 }
